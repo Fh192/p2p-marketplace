@@ -1,15 +1,14 @@
 import type { Game } from './entities/game.entity.js';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { CategoriesRepository } from '../categories/categories.repository.js';
 import { CreateGameDto, UpdateGameDto } from './dto/game.dto.js';
 import { GamesRepository } from './games.repository.js';
 
 @Injectable()
 export class GamesService {
-  constructor(private readonly gamesRepository: GamesRepository, private readonly categoriesRepository: CategoriesRepository) { }
+  constructor(private readonly gamesRepository: GamesRepository) { }
 
   private checkSlug(slug: string) {
-    const isSlugAlreadyExists = this.gamesRepository.findAll().some((game) => game.slug === slug);
+    const isSlugAlreadyExists = !!this.gamesRepository.findOneBy({ slug });
     if (isSlugAlreadyExists) {
       throw new ConflictException(`Game with slug "${slug}" already exists`);
     }
@@ -28,6 +27,7 @@ export class GamesService {
 
     const newGame: Game = {
       ...createGameDto,
+      coverUrl: createGameDto.coverUrl ?? null,
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -49,9 +49,7 @@ export class GamesService {
       throw new NotFoundException('Game not found');
     }
 
-    const categories = this.categoriesRepository.findAll().filter((category) => category.gameId === game.id);
-
-    return { ...game, categories };
+    return game;
   }
 
   update(id: string, updateGameDto: UpdateGameDto) {
@@ -67,10 +65,20 @@ export class GamesService {
       this.checkSlug(newSlug);
     }
 
-    return this.gamesRepository.update(id, updateGameDto);
+    const updatedGame = this.gamesRepository.update(id, updateGameDto);
+
+    if (!updatedGame) {
+      throw new NotFoundException('Game not found');
+    }
+
+    return updatedGame;
   }
 
   remove(id: string) {
-    this.gamesRepository.remove(id);
+    const success = this.gamesRepository.remove(id);
+
+    if (!success) {
+      throw new NotFoundException('Game not found');
+    }
   }
 }

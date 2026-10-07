@@ -6,10 +6,13 @@ import { Category } from './entities/category.entity.js';
 
 @Injectable()
 export class CategoriesService {
-  constructor(private readonly categoriesRepository: CategoriesRepository, private readonly gamesService: GamesService) { }
+  constructor(
+    private readonly categoriesRepository: CategoriesRepository,
+    private readonly gamesService: GamesService
+  ) { }
 
   private checkSlug(gameId: string, slug: string) {
-    const isSlugAlreadyExists = this.findGameCategories(gameId).some((game) => game.slug === slug);
+    const isSlugAlreadyExists = this.findGameCategories(gameId).some((category) => category.slug === slug);
     if (isSlugAlreadyExists) {
       throw new ConflictException(`Category with slug "${slug}" already exists for game with id "${gameId}"`);
     }
@@ -34,7 +37,7 @@ export class CategoriesService {
 
   findGameCategories(gameId: string) {
     this.gamesService.checkGameExistence(gameId);
-    return this.categoriesRepository.findAll().filter((category) => category.gameId === gameId);
+    return this.categoriesRepository.findGameCategories(gameId);
   }
 
   findAll() {
@@ -64,10 +67,20 @@ export class CategoriesService {
       this.checkSlug(category.gameId, newSlug);
     }
 
-    return this.categoriesRepository.update(id, updateCategoryDto);
+    const updatedCategory = this.categoriesRepository.update(id, updateCategoryDto);
+
+    if (!updatedCategory) {
+      throw new NotFoundException('Category not found');
+    }
+
+    return updatedCategory;
   }
 
   remove(id: string) {
-    this.categoriesRepository.remove(id);
+    const success = this.categoriesRepository.remove(id);
+
+    if (!success) {
+      throw new NotFoundException('Category not found');
+    }
   }
 }

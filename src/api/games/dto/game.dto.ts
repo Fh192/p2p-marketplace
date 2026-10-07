@@ -4,7 +4,7 @@ import { slugSchema } from '../../../shared/zod.js';
 export const createGameSchema = z.object({
   title: z.string().trim().nonempty(),
   slug: slugSchema,
-  coverUrl: z.url().nullable(),
+  coverUrl: z.url().nullish(),
 });
 
 export const updateGameSchema = createGameSchema.partial();
