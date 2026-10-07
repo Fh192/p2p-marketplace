@@ -3,7 +3,7 @@ import { slugSchema } from '../../shared/zod.js';
 import { CategoriesService } from '../categories/categories.service.js';
 import { GamesService } from '../games/games.service.js';
 
-@Controller('public')
+@Controller()
 export class PublicController {
   constructor(
     private readonly gamesService: GamesService,
@@ -20,6 +20,6 @@ export class PublicController {
     const game = this.gamesService.findOne({ slug });
     const categories = this.categoryService.findGameCategories(game.id);
 
-    return Object.assign(game, { categories });
+    return { ...game, categories };
   }
 }

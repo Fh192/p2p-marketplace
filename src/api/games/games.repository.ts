@@ -11,25 +11,25 @@ export class GamesRepository {
     this.dbService.games.push(game);
   }
 
-  findAll() {
+  findAll(): Game[] {
     return this.dbService.games;
   }
 
-  findOneBy(query: { slug: string } | { id: string }) {
+  findOneBy(query: { slug: string } | { id: string }): Game | null {
     return this.dbService.games.find((game) => {
       if ('slug' in query) {
         return game.slug === query.slug;
       }
 
       return game.id === query.id;
-    });
+    }) ?? null;
   }
 
-  update(id: string, game: Partial<Game>) {
+  update(id: string, game: Partial<Game>): Game | null {
     const gameIndex = this.dbService.games.findIndex((game) => game.id === id);
 
     if (gameIndex === -1) {
-      return false;
+      return null;
     }
 
     return Object.assign(
@@ -39,7 +39,7 @@ export class GamesRepository {
     );
   }
 
-  remove(id: string) {
+  remove(id: string): boolean {
     const gameIndex = this.dbService.games.findIndex((game) => game.id === id);
 
     if (gameIndex === -1) {
@@ -47,5 +47,7 @@ export class GamesRepository {
     }
 
     this.dbService.games.splice(gameIndex, 1);
+
+    return true;
   }
 }

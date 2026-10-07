@@ -19,7 +19,6 @@ export class CategoriesService {
   }
 
   create(gameId: string, createCategoryDto: CreateCategoryDto) {
-    this.gamesService.checkGameExistence(gameId);
     this.checkSlug(gameId, createCategoryDto.slug);
 
     const newCategory: Category = {

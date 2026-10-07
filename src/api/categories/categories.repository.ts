@@ -11,23 +11,23 @@ export class CategoriesRepository {
     this.dbService.categories.push(category);
   }
 
-  findAll() {
+  findAll(): Category[] {
     return this.dbService.categories;
   }
 
-  findOne(id: string) {
-    return this.dbService.categories.find((category) => category.id === id);
+  findOne(id: string): Category | null {
+    return this.dbService.categories.find((category) => category.id === id) ?? null;
   }
 
-  findGameCategories(gameId: string) {
+  findGameCategories(gameId: string): Category[] {
     return this.dbService.categories.filter((category) => category.gameId === gameId);
   }
 
-  update(id: string, category: Partial<Category>) {
+  update(id: string, category: Partial<Category>): Category | null {
     const categoryIndex = this.dbService.categories.findIndex((category) => category.id === id);
 
     if (categoryIndex === -1) {
-      return false;
+      return null;
     }
 
     return Object.assign(
@@ -37,7 +37,7 @@ export class CategoriesRepository {
     );
   }
 
-  remove(id: string) {
+  remove(id: string): boolean {
     const categoryIndex = this.dbService.categories.findIndex((category) => category.id === id);
 
     if (categoryIndex === -1) {
@@ -45,5 +45,7 @@ export class CategoriesRepository {
     }
 
     this.dbService.categories.splice(categoryIndex, 1);
+
+    return true;
   }
 }
