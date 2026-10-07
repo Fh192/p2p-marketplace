@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { DbModule } from '../db/db.module.js';
+import { CategoriesRepository } from '../categories/categories.repository.js';
 import { GamesController } from './games.controller.js';
+import { GamesRepository } from './games.repository.js';
 import { GamesService } from './games.service.js';
 
 @Module({
-  imports: [DbModule],
+  // imports: [DbModule],
   controllers: [GamesController],
-  providers: [GamesService],
+  providers: [GamesService, GamesRepository, CategoriesRepository],
   exports: [GamesService]
 })
 export class GamesModule { }

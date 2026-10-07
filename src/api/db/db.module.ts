@@ -1,15 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { DbService } from './db.service.js';
+import { DB_SERVICE_TOKEN } from './db.tokens.js';
 
-export const DB_SERVICE_TOKEN = 'DB_SERVICE_TOKEN';
-
+@Global()
 @Module({
   providers: [{
     provide: DB_SERVICE_TOKEN,
-    useFactory() {
-      const dbService = new DbService();
-      return dbService;
-    }
+    useClass: DbService
   }],
   exports: [DB_SERVICE_TOKEN]
 })

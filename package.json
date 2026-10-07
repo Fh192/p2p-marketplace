@@ -32,7 +32,6 @@
     "@scalar/nestjs-api-reference": "^1.2.26",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "uuid": "^14.0.2",
     "zod": "^4.6.5"
   },
   "devDependencies": {

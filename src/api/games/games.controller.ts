@@ -1,4 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
+import { slugSchema } from '../../shared/zod.js';
 import { GamesService } from './games.service.js';
 
 @Controller('games')
@@ -11,7 +12,7 @@ export class GamesController {
   }
 
   @Get(':slug')
-  findOne(@Param('slug') slug: string) {
+  findOne(@Param('slug', { schema: slugSchema }) slug: string) {
     return this.gamesService.findOne({ slug });
   }
 }

@@ -2,8 +2,8 @@ import z from 'zod';
 import { slugSchema } from '../../../shared/zod.js';
 
 export const createCategorySchema = z.object({
-    title: z.string(),
-    slug: slugSchema,
+  title: z.string().trim().nonempty(),
+  slug: slugSchema,
 });
 
 export const updateCategorySchema = createCategorySchema.partial();
