@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Category } from '../categories/entities/category.entity.js';
 import { Game } from '../games/entities/game.entity.js';
+import { Listing } from '../listings/entities/listings.entity.js';
 
 const CREATED = '2026-01-01T00:00:00.000Z';
 const UPDATED = '2026-02-01T00:00:00.000Z';
@@ -64,4 +65,6 @@ export class DbService {
     category(GAMES.minecraft, 'keys', 'Лицензионные ключи'),
 
   ];
+
+  listings: Listing[] = [];
 }
