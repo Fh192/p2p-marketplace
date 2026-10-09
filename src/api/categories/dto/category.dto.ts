@@ -1,5 +1,5 @@
 import z from 'zod';
-import { slugSchema } from '../../../shared/zod.js';
+import { slugSchema } from '../../../shared/validation/slug.js';
 
 export const createCategorySchema = z.object({
   title: z.string().trim().nonempty(),

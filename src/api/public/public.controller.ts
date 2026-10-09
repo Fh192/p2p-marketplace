@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { slugSchema } from '../../shared/zod.js';
+import { slugSchema } from '../../shared/validation/slug.js';
 import { CategoriesService } from '../categories/categories.service.js';
 import { GamesService } from '../games/games.service.js';
 
