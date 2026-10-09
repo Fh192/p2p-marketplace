@@ -8,9 +8,8 @@ export enum ListingDeliveryType {
 export class Listing {
   sellerId: string;
   id: string;
-  slug: string;
   name: string;
-  description: string;
+  description: string | null;
   price: number;
   quantity: number;
   status: ListingStatus;

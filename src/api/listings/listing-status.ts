@@ -28,6 +28,6 @@ export function canTransitionListingStatus(
   actor: Actor,
   { from, to }: { from: ListingStatus; to: ListingStatus }
 ): boolean {
-  const allowed = LISTING_TRANSITIONS[actor][from] ?? [];
+  const allowed = LISTING_TRANSITIONS[actor][from];
   return allowed.includes(to);
 }

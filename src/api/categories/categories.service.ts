@@ -1,5 +1,5 @@
 import type { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto.js';
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { GamesService } from '../games/games.service.js';
 import { CategoriesRepository } from './categories.repository.js';
 import { Category } from './entities/category.entity.js';
@@ -14,7 +14,7 @@ export class CategoriesService {
   private checkSlug(gameId: string, slug: string) {
     const isSlugAlreadyExists = this.findGameCategories(gameId).some((category) => category.slug === slug);
     if (isSlugAlreadyExists) {
-      throw new ConflictException(`Category with slug "${slug}" already exists for game with id "${gameId}"`);
+      throw new UnprocessableEntityException(`Category with slug "${slug}" already exists for game with id "${gameId}"`);
     }
   }
 
@@ -24,8 +24,6 @@ export class CategoriesService {
     if (category.gameId !== gameId) {
       throw new BadRequestException('Category does not belong to game');
     }
-
-    return true;
   }
 
   create(gameId: string, createCategoryDto: CreateCategoryDto) {
